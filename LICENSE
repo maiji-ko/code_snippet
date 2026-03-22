@@ -24,4 +24,8 @@ SOFTWARE.
 This project includes third-party software:
 fast-cpp-csv-parser (https://github.com/ben-strasser/fast-cpp-csv-parser)
 Copyright (c) 2015, ben-strasser
-Licensed under the BSD-3-Clause license (see LICENSES/third-party/fast-cpp-csv-parser.txt)
+Licensed under the BSD-3-Clause license (see third-part/fast-cpp-csv-parser/LICENSE)
+
+ftomlplusplus-3.4.0 (https://github.com/marzer/tomlplusplus/tree/v3.4.0)
+Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
+Licensed under the MIT license (see third-part/tomlplusplus-3.4.0/LICENSE)
