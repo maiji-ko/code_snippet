@@ -1,0 +1,8 @@
+[project]
+name = "code_snippet"
+version = "1.0.0"
+
+[paths]
+project_root = '''E:\Users\PolarLightDance\code\code_snippet'''
+data_dir = "data"
+csv_parser_dir = '''data/fast-cpp-csv-parser'''
