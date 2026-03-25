@@ -4,5 +4,7 @@ version = "1.0.0"
 
 [paths]
 project_root = '''E:\Users\PolarLightDance\code\code_snippet'''
-data_dir = "data"
-csv_parser_dir = '''data/fast-cpp-csv-parser'''
+
+[data]
+fsv_test_file_in = '''data/fast-cpp-csv-parser/in/ram.csv'''
+fsv_test_file_out = '''data/fast-cpp-csv-parser/in/ram_out.csv'''
