@@ -5,7 +5,7 @@
 ```sh
 cmake -S . -B build
 cmake --build build
-./build/snippet
+./build/snippet_executable
 ```
 
 Requires CMake >= 3.20.1 and a C++17 compiler.
