@@ -9,6 +9,7 @@ bool ConfigParser::load(const std::string& config_path) {
     try {
         table_ = toml::parse_file(config_path);
         loaded_ = true;
+        m_projectRoot = fs::current_path();
         return true;
     }
     catch (const toml::parse_error& err) {

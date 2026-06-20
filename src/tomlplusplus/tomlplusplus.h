@@ -56,14 +56,12 @@ public:
 
     // Get absolute path: project_root + relative path from config
     std::optional<fs::path> get_abs_path(const std::string& section, const std::string& key) const {
-        auto project_root = get_string("paths", "project_root");
         auto relative_path = get_string(section, key);
-
-        if (!project_root || !relative_path) {
+        if (!relative_path) {
             return std::nullopt;
         }
 
-        return (fs::path(*project_root) / *relative_path).make_preferred();
+        return (m_projectRoot/ *relative_path).make_preferred();
     }
 
     // Get raw table
@@ -72,4 +70,5 @@ public:
 private:
     toml::table table_;
     bool loaded_ = false;
+    fs::path m_projectRoot;
 };

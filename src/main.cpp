@@ -14,31 +14,9 @@ namespace fs = std::filesystem;
 ConfigParser g_config;
 
 fs::path find_config_file() {
-    // 尝试的路径列表
-    std::vector<fs::path> candidates = {
-        fs::current_path() / "config" / "config.toml",  // 当前工作目录
-    };
-
-    // 从可执行文件目录向上查找
-    fs::path exe_path;
-#ifdef _WIN32
-    wchar_t buffer[MAX_PATH];
-    GetModuleFileNameW(nullptr, buffer, MAX_PATH);
-    exe_path = fs::path(buffer).parent_path();
-#else
-    exe_path = fs::read_symlink("/proc/self/exe").parent_path();
-#endif
-
-    fs::path dir = exe_path;
-    for (int i = 0; i < 5 && !dir.empty(); ++i) {
-        candidates.push_back(dir / "config" / "config.toml");
-        dir = dir.parent_path();
-    }
-
-    for (const auto& p : candidates) {
-        if (fs::exists(p)) {
-            return p;
-        }
+    fs::path configPath = fs::current_path() / "config" / "config.toml";
+    if (fs::exists(configPath)) {
+        return configPath;
     }
 
     return {};
