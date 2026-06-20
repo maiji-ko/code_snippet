@@ -7,7 +7,7 @@
 ```sh
 cmake -S . -B build
 cmake --build build
-./build/snippet_executable
+./build/src/snippet_executable
 ```
 
 需要 CMake >= 3.20.1 和 C++17 编译器。依赖项在配置阶段自动下载，无需手动操作。

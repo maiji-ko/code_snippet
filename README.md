@@ -7,7 +7,7 @@ A C++17 project demonstrating [tomlplusplus](https://github.com/marzer/tomlplusp
 ```sh
 cmake -S . -B build
 cmake --build build
-./build/snippet_executable
+./build/src/snippet_executable
 ```
 
 Requires CMake >= 3.20.1 and a C++17 compiler. Dependencies are auto-downloaded at configure time.
