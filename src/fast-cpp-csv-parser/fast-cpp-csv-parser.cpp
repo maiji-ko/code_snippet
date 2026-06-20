@@ -12,11 +12,11 @@ struct RAMModule {
     double speed;
 };
 
-int sample_fsv()
+int sample_fsv(const std::string& csv_path)
 {
     std::vector<RAMModule> modules;
     try {
-        io::CSVReader<3> in(R"(/home/maijiko/code/code_snippet/data/fast-cpp-csv-parser/in/ram.csv)");
+        io::CSVReader<3> in(csv_path);
         in.read_header(io::ignore_extra_column, "vendor", "size", "speed");
 
         std::string vendor;

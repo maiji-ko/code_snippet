@@ -46,9 +46,7 @@ project_root = "/path/to/project"
 fsv_test_file_in = "data/fast-cpp-csv-parser/in/ram.csv"
 ```
 
-## 已知问题
 
-- `src/fast-cpp-csv-parser/fast-cpp-csv-parser.cpp:19` 包含硬编码的绝对路径，项目位置不同时需要更新。
 
 ## 分支工作流
 

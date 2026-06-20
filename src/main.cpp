@@ -73,7 +73,11 @@ bool init() {
 }
 
 void run() {
-    sample_fsv();
+    if (auto csv_path = g_config.get_abs_path("data", "fsv_test_file_in")) {
+        sample_fsv(csv_path->string());
+    } else {
+        std::cerr << "Failed to resolve CSV path from config\n";
+    }
 }
 
 int main()

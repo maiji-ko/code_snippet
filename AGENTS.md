@@ -20,10 +20,6 @@ Requires CMake >= 3.20.1 and a C++17 compiler.
 | `third-part/tomlplusplus/` | Auto-downloaded by CMake `FetchContent` — [marzer/tomlplusplus](https://github.com/marzer/tomlplusplus) (header-only, MIT) |
 | `data/fast-cpp-csv-parser/in/ram.csv` | Test data |
 
-## Quirks
-
-- **Hardcoded absolute path** in `src/fast-cpp-csv-parser/fast-cpp-csv-parser.cpp:19`. Update it to match your machine before running.
-
 ## Branch Workflow
 
 - `main` is the release branch.
