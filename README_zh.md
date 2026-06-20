@@ -48,8 +48,7 @@ fsv_test_file_in = "data/fast-cpp-csv-parser/in/ram.csv"
 
 ## 已知问题
 
-- `src/fast-cpp-csv-parser/fast-cpp-csv-parser.cpp:19` 包含硬编码的 Windows 绝对路径，运行前请改为正确路径
-- `config/config.toml` 中的 `project_root` 同样是 Windows 路径，请根据环境调整
+- `src/fast-cpp-csv-parser/fast-cpp-csv-parser.cpp:19` 包含硬编码的绝对路径，项目位置不同时需要更新。
 
 ## 分支工作流
 

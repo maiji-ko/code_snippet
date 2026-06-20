@@ -48,8 +48,7 @@ fsv_test_file_in = "data/fast-cpp-csv-parser/in/ram.csv"
 
 ## Known Issues
 
-- `src/fast-cpp-csv-parser/fast-cpp-csv-parser.cpp:19` contains a hardcoded absolute Windows path. Update it to the correct path on your machine before running.
-- `config/config.toml` also contains a Windows-specific `project_root` path — adjust it for your environment.
+- `src/fast-cpp-csv-parser/fast-cpp-csv-parser.cpp:19` contains a hardcoded absolute path. Update it if your project location differs.
 
 ## Branch Workflow
 
