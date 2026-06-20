@@ -8,7 +8,7 @@ cmake --build build
 ./build/snippet
 ```
 
-Requires CMake >= 3.20.1 and a C++11 compiler.
+Requires CMake >= 3.20.1 and a C++17 compiler.
 
 ## Project Structure
 
@@ -17,6 +17,7 @@ Requires CMake >= 3.20.1 and a C++11 compiler.
 | `src/main.cpp` | Entrypoint — calls `sample_fsv()` |
 | `src/fast-cpp-csv-parser/` | Local wrapper around the CSV parser |
 | `third-part/fast-cpp-csv-parser/` | Auto-downloaded by CMake `FetchContent` — [ben-strasser/fast-cpp-csv-parser](https://github.com/ben-strasser/fast-cpp-csv-parser) (header-only, BSD-3-Clause) |
+| `third-part/tomlplusplus/` | Auto-downloaded by CMake `FetchContent` — [marzer/tomlplusplus](https://github.com/marzer/tomlplusplus) (header-only, MIT) |
 | `data/fast-cpp-csv-parser/in/ram.csv` | Test data |
 
 ## Quirks

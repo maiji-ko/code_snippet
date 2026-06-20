@@ -1,11 +1,17 @@
 project(third-part)
 
-# toml
-add_subdirectory(tomlplusplus-3.4.0)
-
-# csv (auto-downloaded via CMake FetchContent)
 include(FetchContent)
 
+# toml (auto-downloaded via CMake FetchContent)
+FetchContent_Declare(
+    tomlplusplus
+    GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
+    GIT_TAG        origin/master
+)
+
+FetchContent_MakeAvailable(tomlplusplus)
+
+# csv (auto-downloaded via CMake FetchContent)
 FetchContent_Declare(
     fast-cpp-csv-parser
     GIT_REPOSITORY https://github.com/ben-strasser/fast-cpp-csv-parser.git
