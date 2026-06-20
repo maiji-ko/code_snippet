@@ -11,10 +11,11 @@
             "args": [
                 "--fresh",
                 "-S", ".",
-                "-B", "build"
+                "-B", "build",
+                "-DCMAKE_BUILD_TYPE=Debug"
             ],
             "group": "build",
-            "detail": "Configure CMake project (fresh)"
+            "detail": "Configure CMake project (Debug, fresh)"
         },
         {
             "label": "cmake-build",
