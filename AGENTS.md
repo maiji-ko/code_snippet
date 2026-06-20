@@ -22,7 +22,7 @@ Requires CMake >= 3.20.1 and a C++17 compiler.
 
 ## Quirks
 
-- **Hardcoded absolute Windows path** in `src/fast-cpp-csv-parser/fast-cpp-csv-parser.cpp:19`. The program will crash on any other machine. Fix the path before running.
+- **Hardcoded absolute path** in `src/fast-cpp-csv-parser/fast-cpp-csv-parser.cpp:19`. Update it to match your machine before running.
 
 ## Branch Workflow
 

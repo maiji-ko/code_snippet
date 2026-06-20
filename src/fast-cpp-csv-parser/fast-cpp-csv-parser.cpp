@@ -16,7 +16,7 @@ int sample_fsv()
 {
     std::vector<RAMModule> modules;
     try {
-        io::CSVReader<3> in(R"(E:\Users\PolarLightDance\code\code_snippet\data\fast-cpp-csv-parser\in\ram.csv)");
+        io::CSVReader<3> in(R"(/home/maijiko/code/code_snippet/data/fast-cpp-csv-parser/in/ram.csv)");
         in.read_header(io::ignore_extra_column, "vendor", "size", "speed");
 
         std::string vendor;
