@@ -41,4 +41,6 @@
 *.dwo
 
 .idea
-build
+
+# Build directory
+build/
