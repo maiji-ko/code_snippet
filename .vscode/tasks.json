@@ -7,13 +7,14 @@
         {
             "label": "cmake-configure",
             "type": "shell",
-            "command": "rm -rf build && cmake",
+            "command": "cmake",
             "args": [
+                "--fresh",
                 "-S", ".",
                 "-B", "build"
             ],
             "group": "build",
-            "detail": "Clean and configure CMake project"
+            "detail": "Configure CMake project (fresh)"
         },
         {
             "label": "cmake-build",
