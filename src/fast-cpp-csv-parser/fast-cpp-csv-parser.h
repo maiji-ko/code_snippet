@@ -1,3 +1,5 @@
 #pragma once
 
-int sample_fsv();
+#include <string>
+
+int sample_fsv(const std::string& csv_path);
