@@ -1,6 +1,6 @@
 # code_snippet
 
-一个 C++17 示例项目，演示通过 CMake `FetchContent` 集成 [tomlplusplus](https://github.com/marzer/tomlplusplus)（TOML 配置解析）和 [fast-cpp-csv-parser](https://github.com/ben-strasser/fast-cpp-csv-parser)（CSV 解析）。
+一个 C++17 示例项目，演示通过 CMake `FetchContent` 集成 [tomlplusplus](https://github.com/marzer/tomlplusplus)（TOML 配置解析）、[fast-cpp-csv-parser](https://github.com/ben-strasser/fast-cpp-csv-parser)（CSV 解析）和 [spdlog](https://github.com/gabime/spdlog)（日志）。
 
 ## 构建与运行
 
@@ -24,7 +24,7 @@ cmake --build build
 
 | 路径 | 说明 |
 |---|---|
-| `src/main.cpp` | 入口 — 加载配置、解析 CSV |
+| `src/main.cpp` | 入口 — 加载配置、通过 spdlog 记录日志、解析 CSV |
 | `src/tomlplusplus/` | `ConfigParser` 封装类，基于 tomlplusplus |
 | `src/fast-cpp-csv-parser/` | CSV 解析器的本地封装 |
 | `config/config.toml` | 应用程序配置 |
@@ -36,8 +36,9 @@ cmake --build build
 
 - **[tomlplusplus](https://github.com/marzer/tomlplusplus)** (MIT) — 仅头文件的 TOML 解析库
 - **[fast-cpp-csv-parser](https://github.com/ben-strasser/fast-cpp-csv-parser)** (BSD-3-Clause) — 仅头文件的 CSV 解析库
+- **[spdlog](https://github.com/gabime/spdlog)** (MIT) — 仅头文件的日志库；以共享库方式构建（`SPDLOG_BUILD_SHARED=ON`），通过 `spdlog::spdlog` 链接。可执行文件的 `BUILD_RPATH` 已指向 `build/_deps/spdlog-build`，因此直接运行 `./build/src/snippet_executable` 无需设置 `LD_LIBRARY_PATH`。
 
-两者均由 CMake 在配置阶段自动下载，无需手动安装。
+三者均由 CMake 在配置阶段自动下载，无需手动安装。
 
 ## 配置
 

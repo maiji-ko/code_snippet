@@ -10,4 +10,10 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
         fast_csv
         tomlplusplus_tomlplusplus
+        spdlog::spdlog
+)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    BUILD_RPATH    "${CMAKE_BINARY_DIR}/_deps/spdlog-build"
+    INSTALL_RPATH  "$ORIGIN/../lib"
 )

@@ -1,6 +1,7 @@
-#include <iostream>
 #include <filesystem>
 #include <vector>
+
+#include <spdlog/spdlog.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -26,23 +27,21 @@ bool init() {
     fs::path config_path = find_config_file();
 
     if (config_path.empty() || !g_config.load(config_path.string())) {
-        std::cerr << "Failed to load config file: " << config_path << "\n";
+        spdlog::error("Failed to load config file: {}", config_path.string());
         return false;
     }
 
-    std::cout << "Config loaded from: " << config_path << "\n\n";
+    spdlog::info("Config loaded from: {}", config_path.string());
 
-    // Demo: get absolute path
     if (auto abs_path = g_config.get_abs_path("data", "fsv_test_file_in")) {
-        std::cout << "fsv_test_file_in absolute path: " << *abs_path << "\n\n";
+        spdlog::info("fsv_test_file_in absolute path: {}", abs_path->string());
     }
 
-    // Print all sections and config
     for (const auto& section : g_config.get_sections()) {
-        std::cout << "[" << section << "]\n";
+        spdlog::info("[{}]", section);
         for (const auto& key : g_config.get_keys(section)) {
             if (auto value = g_config.get_string(section, key)) {
-                std::cout << "  " << key << " = " << *value << "\n";
+                spdlog::info("  {} = {}", key, *value);
             }
         }
     }
@@ -54,7 +53,7 @@ void run() {
     if (auto csv_path = g_config.get_abs_path("data", "fsv_test_file_in")) {
         sample_fsv(csv_path->string());
     } else {
-        std::cerr << "Failed to resolve CSV path from config\n";
+        spdlog::error("Failed to resolve CSV path from config");
     }
 }
 
