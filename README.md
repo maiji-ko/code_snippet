@@ -1,6 +1,6 @@
 # code_snippet
 
-A C++17 project demonstrating [tomlplusplus](https://github.com/marzer/tomlplusplus) (TOML config parsing) and [fast-cpp-csv-parser](https://github.com/ben-strasser/fast-cpp-csv-parser) (CSV parsing) integrated via CMake `FetchContent`.
+A C++17 project demonstrating [tomlplusplus](https://github.com/marzer/tomlplusplus) (TOML config parsing), [fast-cpp-csv-parser](https://github.com/ben-strasser/fast-cpp-csv-parser) (CSV parsing), and [spdlog](https://github.com/gabime/spdlog) (logging) integrated via CMake `FetchContent`.
 
 ## Build & Run
 
@@ -24,7 +24,7 @@ Open the project in VS Code and press **F5**. The `.vscode/` directory provides:
 
 | Path | Role |
 |---|---|
-| `src/main.cpp` | Entrypoint — loads config, parses CSV |
+| `src/main.cpp` | Entrypoint — loads config, logs via spdlog, parses CSV |
 | `src/tomlplusplus/` | `ConfigParser` wrapper around tomlplusplus |
 | `src/fast-cpp-csv-parser/` | Local wrapper around the CSV parser |
 | `config/config.toml` | Application configuration |
@@ -36,8 +36,9 @@ Open the project in VS Code and press **F5**. The `.vscode/` directory provides:
 
 - **[tomlplusplus](https://github.com/marzer/tomlplusplus)** (MIT) — header-only TOML parser
 - **[fast-cpp-csv-parser](https://github.com/ben-strasser/fast-cpp-csv-parser)** (BSD-3-Clause) — header-only CSV parser
+- **[spdlog](https://github.com/gabime/spdlog)** (MIT) — header-only logging library; built as a shared library (`SPDLOG_BUILD_SHARED=ON`) and linked via `spdlog::spdlog`. The executable's `BUILD_RPATH` points at `build/_deps/spdlog-build`, so `./build/src/snippet_executable` runs without `LD_LIBRARY_PATH`.
 
-Both are downloaded automatically by CMake during configuration; no manual setup needed.
+All three are downloaded automatically by CMake during configuration; no manual setup needed.
 
 ## Configuration
 
