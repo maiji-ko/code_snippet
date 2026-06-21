@@ -7,6 +7,7 @@ FetchContent_Declare(
     tomlplusplus
     GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
     GIT_TAG        origin/master
+    GIT_SHALLOW    TRUE
 )
 
 FetchContent_MakeAvailable(tomlplusplus)
@@ -16,6 +17,7 @@ FetchContent_Declare(
     fast-cpp-csv-parser
     GIT_REPOSITORY https://github.com/ben-strasser/fast-cpp-csv-parser.git
     GIT_TAG        origin/master
+    GIT_SHALLOW    TRUE
 )
 
 FetchContent_MakeAvailable(fast-cpp-csv-parser)
