@@ -4,12 +4,15 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/src",
-                "${workspaceFolder}/third-part/**"
+                "${workspaceFolder}/build/_deps/spdlog-src/include",
+                "${workspaceFolder}/build/_deps/tomlplusplus-src/include",
+                "${workspaceFolder}/build/_deps/fast-cpp-csv-parser-src"
             ],
             "defines": [],
             "cStandard": "c17",
             "cppStandard": "c++17",
-            "intelliSenseMode": "linux-gcc-x64",
+            "intelliSenseMode": "linux-clang-x64",
+            "compilerPath": "/usr/bin/clang++",
             "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],

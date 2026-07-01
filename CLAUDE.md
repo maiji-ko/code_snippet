@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Build Commands
 
-This project uses CMake (minimum 3.30.5).
+This project uses CMake (minimum 3.20.1, matching `CMakeLists.txt:1`).
 
 ```bash
 # Configure and build

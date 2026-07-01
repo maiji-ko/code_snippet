@@ -28,8 +28,7 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "dependsOn": ["cmake-configure"],
-            "problemMatcher": ["$gcc"],
+            "problemMatcher": ["$clang"],
             "detail": "Build the project"
         },
         {
