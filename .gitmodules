@@ -1,0 +1,9 @@
+[submodule "third-part/fast-cpp-csv-parser"]
+	path = third-part/fast-cpp-csv-parser
+	url = https://github.com/ben-strasser/fast-cpp-csv-parser.git
+[submodule "third-part/spdlog"]
+	path = third-part/spdlog
+	url = https://github.com/gabime/spdlog.git
+[submodule "third-part/tomlplusplus"]
+	path = third-part/tomlplusplus
+	url = https://github.com/marzer/tomlplusplus.git

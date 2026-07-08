@@ -14,6 +14,6 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    BUILD_RPATH    "${CMAKE_BINARY_DIR}/_deps/spdlog-build"
+    BUILD_RPATH    "${CMAKE_BINARY_DIR}/third-part/spdlog"
     INSTALL_RPATH  "$ORIGIN/../lib"
 )

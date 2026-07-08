@@ -44,3 +44,6 @@
 
 # Build directory
 build/
+
+# CodeGraph local index (rebuild via `codegraph init`)
+.codegraph/
