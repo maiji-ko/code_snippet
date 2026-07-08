@@ -3,43 +3,54 @@
 ## Build & Run
 
 ```sh
+git submodule update --init --recursive
 cmake -S . -B build
 cmake --build build
 ./build/src/snippet_executable
 ```
 
-- Requires CMake >= 3.20.1 (root `CMakeLists.txt:1`) and a C++17 compiler. Default `CMAKE_BUILD_TYPE` is `Debug` (root `CMakeLists.txt:5-7`). No `CMAKE_CXX_STANDARD` is set anywhere — the project relies on the compiler default being C++17+ (true for GCC 11+, Clang 14+, MSVC 19.30+).
-- Third-party deps (tomlplusplus, fast-cpp-csv-parser, spdlog) are auto-downloaded by CMake `FetchContent` (`third-part/CMakeLists.txt:1-44`). The first configure needs network access.
-- **Generator gotcha:** CMake refuses to switch generators in-place. If you see `Error: generator : Ninja Does not match the generator used previously: Unix Makefiles`, run `rm -rf build` (or pick a fresh `-B build-<name>`) and reconfigure. The VS Code `cmake-configure` task already uses `--fresh` to avoid this.
-- **Run the binary from the repo root.** `src/main.cpp:17-24` resolves the config path as `fs::current_path() / "config" / "config.toml"`, and `ConfigParser::load` (`src/tomlplusplus/tomlplusplus.cpp:12`) sets `m_projectRoot` from `fs::current_path()`. Running from `build/` or any other directory makes config lookup and `get_abs_path()` return wrong paths.
-- spdlog is built as a shared library (`SPDLOG_BUILD_SHARED=ON` in `third-part/CMakeLists.txt:42`). `src/CMakeLists.txt:16-19` sets `BUILD_RPATH` to `_deps/spdlog-build` so `./build/src/snippet_executable` runs without `LD_LIBRARY_PATH` — keep this when editing `src/CMakeLists.txt`.
+- Requires CMake >= 3.20.1 (`CMakeLists.txt:1`) and a C++17 compiler.
+- Third-party deps (tomlplusplus, fast-cpp-csv-parser, spdlog) live in `third-part/` as **git submodules** (`.gitmodules`). First-time setup needs network access to clone them.
+- Root `CMakeLists.txt:3` hard-sets `CMAKE_CXX_COMPILER=clang++`. Edit or unset there to use a different compiler.
+- Default `CMAKE_BUILD_TYPE=Debug` (`CMakeLists.txt:7-9`).
 
-## Project Structure
+### Gotchas
+
+- **Run the binary from the repo root.** `src/main.cpp:18` resolves `config/config.toml` via `fs::current_path()`, and `ConfigParser::load` (`src/tomlplusplus/tomlplusplus.cpp:12`) records `fs::current_path()` as `m_projectRoot` for `get_abs_path()`. Running from `build/` (or anywhere else) silently breaks both config lookup and path resolution.
+- **Generator mismatch.** If configure fails with `generator : Ninja Does not match the generator used previously: Unix Makefiles`, run `rm -rf build` (or use a fresh `-B build-<name>`) and reconfigure.
+- **spdlog is built as a shared library** (`SPDLOG_BUILD_SHARED=ON` in `third-part/CMakeLists.txt:18`). Build artifacts land in `build/third-part/spdlog/`, and `src/CMakeLists.txt:16-19` sets `BUILD_RPATH` to that dir so `./build/src/snippet_executable` runs without `LD_LIBRARY_PATH`. Update `BUILD_RPATH` when adding another shared dep.
+- **`config.toml` references an unwritten output path.** `[data] fsv_test_file_out` points to `data/fast-cpp-csv-parser/out/ram_out.csv`, but the `out/` directory is not created. The current `sample_fsv()` only reads, so a build is fine, but agents writing output must `mkdir -p` the dir first.
+
+## Submodules
+
+| Pinned commit | Repo | Tag / Branch |
+|---|---|---|
+| `30172438cee64926dc41fdd9c11fb3ba5b2ba9de` | marzer/tomlplusplus | `v3.4.0` |
+| `574a9fe4d323ba63416877a4a5fe59088d37aa34` | ben-strasser/fast-cpp-csv-parser | master HEAD |
+| `79524ddd08a4ec981b7fea76afd08ee05f83755d` | gabime/spdlog | `v1.17.0` |
+
+To bump a dep: edit `.gitmodules` (URL), run `git submodule sync`, then inside the submodule `git fetch --depth=1 origin <ref>` and `git checkout <ref>`, then commit the parent's new gitlink SHA.
+
+## Project Layout
 
 | Path | Role |
 |---|---|
-| `src/main.cpp` | Entrypoint — finds `config/config.toml`, logs config keys, calls `sample_fsv()` |
-| `src/tomlplusplus/` | Wrapper: `ConfigParser` (`get_string`, `get_int`, `get_abs_path`, ...) around `<toml++/toml.hpp>` |
-| `src/fast-cpp-csv-parser/` | Wrapper: `int sample_fsv(const std::string& csv_path)` around `csv.h` |
-| `src/CMakeLists.txt` | Executable target `snippet_executable`; lists wrapper `.cpp` files explicitly, not globbed |
-| `third-part/CMakeLists.txt` | `FetchContent` declarations; exposes `fast_csv` (INTERFACE, `cxx_std_11`) |
-| `config/config.toml` | Runtime config; section `[project]` (name/version) and `[data]` (CSV paths) |
+| `src/main.cpp` | Entrypoint — loads `config/config.toml`, logs every key via spdlog, calls `sample_fsv()` |
+| `src/tomlplusplus/` | `ConfigParser` wrapper around `<toml++/toml.hpp>` (`get_string`, `get_int`, `get_bool`, `get_abs_path`, ...) |
+| `src/fast-cpp-csv-parser/` | `int sample_fsv(const std::string& csv_path)` wrapper around `csv.h` |
+| `src/CMakeLists.txt` | Lists wrapper `.cpp` files explicitly (no globbing) |
+| `third-part/CMakeLists.txt` | `add_subdirectory` for tomlplusplus & spdlog; exposes `fast_csv` and `tomlplusplus::tomlplusplus` targets, plus `spdlog::spdlog` |
+| `config/config.toml` | Runtime config — `[project]` (name/version) and `[data]` (CSV paths) |
 | `data/fast-cpp-csv-parser/in/ram.csv` | Sample CSV (3 columns: `vendor`, `size`, `speed`) |
 
 ## Adding Code
 
-- Add new source files to the `add_executable(...)` list at `src/CMakeLists.txt:3-7` (sources are listed explicitly, not globbed).
-- Add new third-party deps via `FetchContent` in `third-part/CMakeLists.txt`, then link the target in `src/CMakeLists.txt:9-14`. For shared libraries, also update `BUILD_RPATH` (`src/CMakeLists.txt:16-19`).
+- New `.cpp` files must be added to the explicit list in `src/CMakeLists.txt:3-7` (no globbing).
+- New third-party deps go in `third-part/CMakeLists.txt` via `add_subdirectory`, then are linked in `src/CMakeLists.txt:9-14`. Shared deps also need the `BUILD_RPATH` update at `src/CMakeLists.txt:16-19`.
 
 ## VS Code
 
-`.vscode/tasks.json` provides `cmake-configure` (uses `--fresh`), `cmake-build` (default build), `cmake-clean`, and `run` (default test task). `.vscode/launch.json` is a GDB config that auto-runs `cmake-build` and sets `cwd` to `${workspaceFolder}`. F5 works out of the box.
-
-## Branch Workflow
-
-- `main` is the release branch.
-- `dev` is the integration branch. PRs merge `dev` into `main`.
-- Work on feature branches off `dev`.
+`.vscode/tasks.json` provides `cmake-configure` (uses `--fresh`), `cmake-build` (default), `cmake-clean`, and `run` (default test task). `.vscode/launch.json` is a GDB config that auto-runs `cmake-build` and sets `cwd` to `${workspaceFolder}` — F5 works out of the box.
 
 ## Testing
 
@@ -49,15 +60,4 @@ No test framework, no CI (no `.github/`). Verify with the binary from the repo r
 ./build/src/snippet_executable
 ```
 
-It logs every key in `config/config.toml` and parses `[data] fsv_test_file_in` (default `data/fast-cpp-csv-parser/in/ram.csv`). The VS Code `run` task (`.vscode/tasks.json:46-56`) wraps this.
-
-<!-- CODEGRAPH_START -->
-## CodeGraph
-
-In repositories indexed by CodeGraph (a `.codegraph/` directory exists at the repo root), reach for it BEFORE grep/find or reading files when you need to understand or locate code:
-
-- **MCP tool** (when available): `codegraph_explore` answers most code questions in one call — the relevant symbols' verbatim source plus the call paths between them, including dynamic-dispatch hops grep can't follow. Name a file or symbol in the query to read its current line-numbered source. If it's listed but deferred, load it by name via tool search.
-- **Shell** (always works): `codegraph explore "<symbol names or question>"` prints the same output.
-
-If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is the user's decision.
-<!-- CODEGRAPH_END -->
+It logs every key in `config/config.toml` and parses `[data] fsv_test_file_in` (default `data/fast-cpp-csv-parser/in/ram.csv`).
