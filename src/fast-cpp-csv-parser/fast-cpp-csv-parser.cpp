@@ -2,7 +2,8 @@
 
 #include <vector>
 #include <string>
-#include <iostream>
+
+#include <spdlog/spdlog.h>
 
 #include "csv.h"
 
@@ -14,30 +15,33 @@ struct RAMModule {
 
 int sample_fsv(const std::string& csv_path)
 {
+    spdlog::info("{} opening CSV: {}", kFastTag, csv_path);
+
     std::vector<RAMModule> modules;
     try {
         io::CSVReader<3> in(csv_path);
         in.read_header(io::ignore_extra_column, "vendor", "size", "speed");
+        spdlog::info("{} header parsed (vendor, size, speed)", kFastTag);
 
         std::string vendor;
         int size;
         double speed;
 
-        while(in.read_row(vendor, size, speed)) {
+        while (in.read_row(vendor, size, speed)) {
             modules.push_back({vendor, size, speed});
+            spdlog::debug("{} row: vendor={} size={}GB speed={}MHz",
+                          kFastTag, vendor, size, speed);
         }
 
-        // 显示读取结果
-        std::cout << "Successfully read " << modules.size() << " RAM record\n\n";
-
-        for(const auto& m : modules) {
-            std::cout << "Vendor: " << m.vendor
-                      << ", Size: " << m.size << "GB"
-                      << ", Speed: " << m.speed << "MHz\n";
+        spdlog::info("{} read {} RAM record(s)", kFastTag, modules.size());
+        for (const auto& m : modules) {
+            spdlog::info("{} record: vendor={} size={}GB speed={}MHz",
+                         kFastTag, m.vendor, m.size, m.speed);
         }
 
-    } catch(const std::exception& e) {
-        std::cerr << "Error reading CSV file: " << e.what() << std::endl;
+    } catch (const std::exception& e) {
+        spdlog::error("{} error reading CSV file '{}': {}",
+                      kFastTag, csv_path, e.what());
         return 1;
     }
     return 0;
