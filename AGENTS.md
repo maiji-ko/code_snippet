@@ -47,6 +47,10 @@ To bump a dep: edit `.gitmodules` (URL), run `git submodule sync`, then inside t
 
 - New `.cpp` files must be added to the explicit list in `src/CMakeLists.txt:3-7` (no globbing).
 - New third-party deps go in `third-part/CMakeLists.txt` via `add_subdirectory`, then are linked in `src/CMakeLists.txt:9-14`. Shared deps also need the `BUILD_RPATH` update at `src/CMakeLists.txt:16-19`.
+- **Whenever a module is added, removed, or a dep is bumped, keep docs in sync in the same change:**
+  - `LICENSE` — third-party block (项目元信息 + 每个子模块的 pin / 协议 / 指向 `third-part/<lib>/LICENSE`).
+  - `README.md` + `readme/README_en.md` — Project Layout 表、依赖表、配置示例、添加代码约定；中英两边都要改.
+  - `AGENTS.md` — Submodules 表、Project Layout 表、Build & Run 或 Adding Code 段里的相关描述.
 
 ## VS Code
 
