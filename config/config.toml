@@ -5,3 +5,8 @@ version = "1.0.0"
 [data]
 fsv_test_file_in = "data/fast-cpp-csv-parser/in/ram.csv"
 fsv_test_file_out = "data/fast-cpp-csv-parser/out/ram_out.csv"
+
+[log]
+dir  = "log"
+file = "spdlog"
+level = "info"

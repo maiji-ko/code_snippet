@@ -9,10 +9,12 @@
 
 #include "fast-cpp-csv-parser/fast-cpp-csv-parser.h"
 #include "tomlplusplus/tomlplusplus.h"
+#include "spdlog/spdlog.h"
 
 namespace fs = std::filesystem;
 
 ConfigParser g_config;
+Logger       g_logger;
 
 fs::path find_config_file() {
     fs::path configPath = fs::current_path() / "config" / "config.toml";
@@ -29,6 +31,15 @@ bool init() {
     if (config_path.empty() || !g_config.load(config_path.string())) {
         spdlog::error("Failed to load config file: {}", config_path.string());
         return false;
+    }
+
+    const auto log_dir   = g_config.get_string("log", "dir").value_or("log");
+    const auto log_file  = g_config.get_string("log", "file").value_or("spdlog");
+    const auto log_level = g_config.get_string("log", "level").value_or("info");
+
+    if (!g_logger.init(fs::current_path(), log_dir, log_file, log_level)) {
+        spdlog::error("Failed to initialize logger ({} dir={} file={} level={})",
+                      fs::current_path().string(), log_dir, log_file, log_level);
     }
 
     spdlog::info("Config loaded from: {}", config_path.string());

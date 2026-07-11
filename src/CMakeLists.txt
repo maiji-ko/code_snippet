@@ -3,6 +3,7 @@ project(snippet_executable)
 add_executable(${PROJECT_NAME}
     tomlplusplus/tomlplusplus.cpp
     fast-cpp-csv-parser/fast-cpp-csv-parser.cpp
+    spdlog/spdlog.cpp
     main.cpp
 )
 

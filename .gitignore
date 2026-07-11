@@ -45,5 +45,8 @@
 # Build directory
 build/
 
+# Runtime logs (spdlog output)
+log/
+
 # CodeGraph local index (rebuild via `codegraph init`)
 .codegraph/
