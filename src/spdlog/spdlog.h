@@ -26,6 +26,8 @@ public:
               const std::string& base_filename = "spdlog",
               const std::string& level = "info");
 
+    bool set_level(const std::string& level);
+
     bool is_initialized() const { return initialized_; }
 
     // Returns the configured default logger (or spdlog's default if init was skipped).

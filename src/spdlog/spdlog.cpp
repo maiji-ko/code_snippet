@@ -54,10 +54,16 @@ bool Logger::init(const fs::path& project_root,
     logger->flush_on(spdlog::level::warn);
 
     spdlog::set_default_logger(logger);
-    spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] %v");
+    spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%L] %v");
 
     logger_ = std::move(logger);
     initialized_ = true;
+    return true;
+}
+
+bool Logger::set_level(const std::string& level) {
+    if (!logger_) return false;
+    logger_->set_level(parse_level(level));
     return true;
 }
 

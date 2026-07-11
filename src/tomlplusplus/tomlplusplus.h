@@ -5,8 +5,11 @@
 #include <vector>
 #include <filesystem>
 #include <toml++/toml.hpp>
+#include <spdlog/spdlog.h>
 
 namespace fs = std::filesystem;
+
+inline constexpr std::string_view kTomlTag = "[tomlplusplus]";
 
 class ConfigParser {
 public:
@@ -25,12 +28,22 @@ public:
     // Generic get by section and key
     template<typename T>
     std::optional<T> get(const std::string& section, const std::string& key) const {
-        if (!loaded_) return std::nullopt;
+        if (!loaded_) {
+            spdlog::warn("{} get<{}>([{}].{}) called before a successful load()",
+                         kTomlTag, typeid(T).name(), section, key);
+            return std::nullopt;
+        }
 
         auto node = table_.at_path(section + "." + key);
+        if (!node) {
+            spdlog::debug("{} [{}].{} not present in config", kTomlTag, section, key);
+            return std::nullopt;
+        }
         if (auto value = node.value<T>()) {
             return *value;
         }
+        spdlog::warn("{} [{}].{} exists but is not parseable as the requested type",
+                     kTomlTag, section, key);
         return std::nullopt;
     }
 
@@ -55,14 +68,8 @@ public:
     }
 
     // Get absolute path: project_root + relative path from config
-    std::optional<fs::path> get_abs_path(const std::string& section, const std::string& key) const {
-        auto relative_path = get_string(section, key);
-        if (!relative_path) {
-            return std::nullopt;
-        }
-
-        return (m_projectRoot/ *relative_path).make_preferred();
-    }
+    std::optional<fs::path> get_abs_path(const std::string& section,
+                                         const std::string& key) const;
 
     // Get raw table
     const toml::table& raw_table() const { return table_; }
