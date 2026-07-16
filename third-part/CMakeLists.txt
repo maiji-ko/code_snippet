@@ -14,3 +14,7 @@ target_compile_features(fast_csv
 
 set(SPDLOG_BUILD_SHARED ON CACHE BOOL "Build spdlog as shared library" FORCE)
 add_subdirectory(spdlog)
+
+set(CATCH_BUILD_TESTING OFF CACHE BOOL "Disable Catch2's own tests" FORCE)
+set(CATCH_INSTALL_DOCS OFF CACHE BOOL "Disable Catch2 doc installation" FORCE)
+add_subdirectory(catch2)

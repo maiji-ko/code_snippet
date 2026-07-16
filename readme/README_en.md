@@ -11,6 +11,7 @@ A C++17 sample project that integrates via **git submodules**:
 - [tomlplusplus](https://github.com/marzer/tomlplusplus) — TOML configuration parsing
 - [fast-cpp-csv-parser](https://github.com/ben-strasser/fast-cpp-csv-parser) — CSV parsing
 - [spdlog](https://github.com/gabime/spdlog) — logging
+- [Catch2](https://github.com/catchorg/Catch2) — unit testing
 
 Each third-party library has a thin local wrapper (`Logger`, `ConfigParser`, CSV wrapper) under `src/<lib>/<lib>.{h,cpp}`, mirroring the layout of `third-part/`.
 
@@ -47,7 +48,9 @@ Open the project in VS Code and press **F5**. The `.vscode/` directory provides:
 | `src/spdlog/` | `Logger` wrapper around spdlog; auto-rotates files into `log/` |
 | `src/CMakeLists.txt` | Explicit list of wrapper sources (no globbing) |
 | `third-part/` | Third-party dependencies (git submodules) |
-| `third-part/CMakeLists.txt` | Pulls submodules via `add_subdirectory`; exposes the `fast_csv` interface library |
+| `third-part/CMakeLists.txt` | Pulls submodules via `add_subdirectory`; exposes `fast_csv` interface library |
+| `test/` | Catch2 unit tests (CSV parsing, config parsing, etc.) |
+| `test/CMakeLists.txt` | Defines test executables linking `Catch2::Catch2WithMain` |
 | `config/config.toml` | Runtime configuration (project metadata, data paths, logging) |
 | `data/fast-cpp-csv-parser/in/ram.csv` | Sample CSV test data |
 | `log/` | Runtime log directory (created on first run) |
@@ -59,8 +62,9 @@ Open the project in VS Code and press **F5**. The `.vscode/` directory provides:
 | [tomlplusplus](https://github.com/marzer/tomlplusplus) `v3.4.0` | MIT | Header-only TOML parser |
 | [fast-cpp-csv-parser](https://github.com/ben-strasser/fast-cpp-csv-parser) (master HEAD) | BSD-3-Clause | Header-only CSV parser |
 | [spdlog](https://github.com/gabime/spdlog) `v1.17.0` | MIT | Header-only logging library; built as a shared library (`SPDLOG_BUILD_SHARED=ON`) and linked via `spdlog::spdlog` |
+| [Catch2](https://github.com/catchorg/Catch2) `v3.15.2` | BSL-1.0 | Header-only unit test framework; linked via `Catch2::Catch2WithMain` |
 
-All three are registered as git submodules in `.gitmodules` and consumed via `add_subdirectory` under `third-part/`. spdlog's build artifacts land in `build/third-part/spdlog/`, and the executable's `BUILD_RPATH` already points there, so `./build/src/snippet_executable` runs without `LD_LIBRARY_PATH`.
+All four are registered as git submodules in `.gitmodules` and consumed via `add_subdirectory` under `third-part/`. spdlog's build artifacts land in `build/third-part/spdlog/`, and the executable's `BUILD_RPATH` already points there, so `./build/src/snippet_executable` runs without `LD_LIBRARY_PATH`.
 
 ## Pinned Submodule Versions
 
@@ -69,6 +73,7 @@ All three are registered as git submodules in `.gitmodules` and consumed via `ad
 | `30172438cee64926dc41fdd9c11fb3ba5b2ba9de` | marzer/tomlplusplus | `v3.4.0` |
 | `574a9fe4d323ba63416877a4a5fe59088d37aa34` | ben-strasser/fast-cpp-csv-parser | master HEAD |
 | `79524ddd08a4ec981b7fea76afd08ee05f83755d` | gabime/spdlog | `v1.17.0` |
+| `191fa38c9b1596cd2576ab531d4ab4d5e8e05190` | catchorg/Catch2 | `v3.15.2` |
 
 To bump a dependency: edit `.gitmodules` (URL), run `git submodule sync`, then inside the submodule run `git fetch --depth=1 origin <ref>` and `git checkout <ref>`, and finally commit the parent's new gitlink SHA.
 
@@ -98,6 +103,7 @@ CSV paths are joined to `project_root` at runtime. The logger reads the `[log]` 
 - New `.cpp` files must be listed explicitly in `src/CMakeLists.txt:3-7` (no globbing).
 - New third-party dependencies go in `third-part/CMakeLists.txt` via `add_subdirectory`, then are linked in `src/CMakeLists.txt:9-14`. Shared libraries also need the `BUILD_RPATH` update at `src/CMakeLists.txt:16-19`.
 - To add a new wrapper for a third-party library, follow the existing pattern: create `src/<lib>/<lib>.{h,cpp}`, expose a small class (e.g. `ConfigParser`, `Logger`), and call its initializer from `main.cpp`.
+- New tests go in `test/`, registered as executables in `test/CMakeLists.txt` linking `Catch2::Catch2WithMain`.
 
 ## Branch Workflow
 

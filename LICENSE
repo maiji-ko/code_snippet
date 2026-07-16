@@ -39,3 +39,8 @@ spdlog (https://github.com/gabime/spdlog)
 Copyright (c) 2016 - present, Gabi Melman and spdlog contributors.
 Pinned: v1.17.0 @ 79524ddd08a4ec981b7fea76afd08ee05f83755d
 License: MIT (see third-part/spdlog/LICENSE)
+
+Catch2 (https://github.com/catchorg/Catch2)
+Copyright (c) Catch2 Contributors
+Pinned: v3.15.2 @ 191fa38c9b1596cd2576ab531d4ab4d5e8e05190
+License: BSL-1.0 (see third-part/catch2/LICENSE.txt)
