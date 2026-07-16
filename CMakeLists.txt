@@ -11,3 +11,6 @@ endif()
 add_subdirectory(third-part)
 
 add_subdirectory(src)
+
+enable_testing()
+add_subdirectory(test)

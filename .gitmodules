@@ -7,3 +7,6 @@
 [submodule "third-part/tomlplusplus"]
 	path = third-part/tomlplusplus
 	url = https://github.com/marzer/tomlplusplus.git
+[submodule "third-part/catch2"]
+	path = third-part/catch2
+	url = https://github.com/catchorg/Catch2.git

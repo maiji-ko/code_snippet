@@ -10,7 +10,7 @@ cmake --build build
 ```
 
 - Requires CMake >= 3.20.1 (`CMakeLists.txt:1`) and a C++17 compiler.
-- Third-party deps (tomlplusplus, fast-cpp-csv-parser, spdlog) live in `third-part/` as **git submodules** (`.gitmodules`). First-time setup needs network access to clone them.
+- Third-party deps (tomlplusplus, fast-cpp-csv-parser, spdlog, Catch2) live in `third-part/` as **git submodules** (`.gitmodules`). First-time setup needs network access to clone them.
 - Root `CMakeLists.txt:3` hard-sets `CMAKE_CXX_COMPILER=clang++`. Edit or unset there to use a different compiler.
 - Default `CMAKE_BUILD_TYPE=Debug` (`CMakeLists.txt:7-9`).
 
@@ -28,6 +28,7 @@ cmake --build build
 | `30172438cee64926dc41fdd9c11fb3ba5b2ba9de` | marzer/tomlplusplus | `v3.4.0` |
 | `574a9fe4d323ba63416877a4a5fe59088d37aa34` | ben-strasser/fast-cpp-csv-parser | master HEAD |
 | `79524ddd08a4ec981b7fea76afd08ee05f83755d` | gabime/spdlog | `v1.17.0` |
+| `191fa38c9b1596cd2576ab531d4ab4d5e8e05190` | catchorg/Catch2 | `v3.15.2` |
 
 To bump a dep: edit `.gitmodules` (URL), run `git submodule sync`, then inside the submodule `git fetch --depth=1 origin <ref>` and `git checkout <ref>`, then commit the parent's new gitlink SHA.
 
@@ -39,7 +40,7 @@ To bump a dep: edit `.gitmodules` (URL), run `git submodule sync`, then inside t
 | `src/tomlplusplus/` | `ConfigParser` wrapper around `<toml++/toml.hpp>` (`get_string`, `get_int`, `get_bool`, `get_abs_path`, ...) |
 | `src/fast-cpp-csv-parser/` | `int sample_fsv(const std::string& csv_path)` wrapper around `csv.h` |
 | `src/CMakeLists.txt` | Lists wrapper `.cpp` files explicitly (no globbing) |
-| `third-part/CMakeLists.txt` | `add_subdirectory` for tomlplusplus & spdlog; exposes `fast_csv` and `tomlplusplus::tomlplusplus` targets, plus `spdlog::spdlog` |
+| `third-part/CMakeLists.txt` | `add_subdirectory` for tomlplusplus, spdlog & Catch2; exposes `fast_csv` and `tomlplusplus::tomlplusplus` targets, plus `spdlog::spdlog` and `Catch2::Catch2WithMain` |
 | `config/config.toml` | Runtime config — `[project]` (name/version) and `[data]` (CSV paths) |
 | `data/fast-cpp-csv-parser/in/ram.csv` | Sample CSV (3 columns: `vendor`, `size`, `speed`) |
 
@@ -58,10 +59,19 @@ To bump a dep: edit `.gitmodules` (URL), run `git submodule sync`, then inside t
 
 ## Testing
 
-No test framework, no CI (no `.github/`). Verify with the binary from the repo root:
+Tests use **Catch2 v3.15.2** (`Catch2::Catch2WithMain`). Build and run with CTest:
 
 ```sh
-./build/src/snippet_executable
+cmake -S . -B build
+cmake --build build
+cd build && ctest --output-on-failure
 ```
 
-It logs every key in `config/config.toml` and parses `[data] fsv_test_file_in` (default `data/fast-cpp-csv-parser/in/ram.csv`).
+Or run test binaries directly:
+
+```sh
+./build/test/test_csv
+./build/test/test_config
+```
+
+The test targets are defined in `test/CMakeLists.txt` and cover CSV parsing (`test_csv`) and config parsing (`test_config`).
